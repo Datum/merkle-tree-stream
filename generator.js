@@ -67,14 +67,15 @@ MerkleGenerator.prototype._updateRoots = function (nodes, merge) {
         data: right.data
       }
 
-      this.roots.push(right)
+      // don't push the copy into the roots
+      // this.roots.push(right)
     }
 
     this.roots.pop()
     this.roots[this.roots.length - 1] = leaf = {
       index: left.parent,
       parent: flat.parent(left.parent),
-      hash: this._parent(left, right),
+      hash: merge ? this._parent(this.roots[this.roots.length - 1], right) : this._parent(left, right), // follow merkle-tree-solidity logic and hash with left siblings parent hash instead with the copy of itself
       size: left.size + right.size,
       data: null
     }
